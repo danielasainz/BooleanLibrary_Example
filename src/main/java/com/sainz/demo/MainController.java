@@ -16,7 +16,7 @@ public class MainController {
 
     @RequestMapping("/")
     public String showIndex(Model model) {
-        model.addAttribute("library",bookRepo.findAll());
+        model.addAttribute("library", bookRepo.findAll());
         return "index";
     }
 
@@ -27,11 +27,9 @@ public class MainController {
     }
 
     @RequestMapping("/savebook")
-    public String saveBook(@ModelAttribute("aBook") Book toSave, BindingResult result)
-    {
+    public String saveBook(@ModelAttribute("aBook") Book toSave, BindingResult result) {
 
-        if(result.hasErrors())
-        {
+        if (result.hasErrors()) {
             return "addbook";
         }
         bookRepo.save(toSave);
@@ -46,4 +44,18 @@ public class MainController {
         bookRepo.save(thisBook);
         return "redirect:/";
     }
-}
+        @RequestMapping("/update/{id}")
+//name of a java method that returns a string (updateBook) - doesn't matter what you name it
+        public String updateBook ( @PathVariable("id") long id, Model model)
+        {
+            model.addAttribute("aBook", bookRepo.findById(id).get());
+            return "addbook";
+        }
+
+        @RequestMapping("/delete/{id}")
+        public String deleteBook ( @PathVariable("id") long id){
+            bookRepo.deleteById(id);
+            return "redirect:/";
+        }
+    }
+
